@@ -1,4 +1,5 @@
 "use client"
+import Header from "@/components/header";
 import { useEffect, useState } from "react";
 
 export default function Home() {
@@ -17,8 +18,11 @@ export default function Home() {
 
   return (
     <>
-      <div className="h-screen w-screen bg-gray-200">
-        <h1>Home</h1>
+      <Header />
+      <div className="h-screen w-screen bg-gray-200 flex justify-center">
+        <div className="bg-gray-300 w-[65%]">
+          <h1>Test</h1>
+        </div>
       </div>
     </>
   );

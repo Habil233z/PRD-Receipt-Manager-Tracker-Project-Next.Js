@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import Link from "next/link"
 import { useEffect, useState } from "react"
 
-export default function login() {
+export default function Register() {
     const [token, setToken] = useState<string|null>(null)
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
