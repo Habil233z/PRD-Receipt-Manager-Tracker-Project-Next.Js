@@ -1,27 +1,29 @@
-import { prisma } from "@/lib/prisma"
-import { NextApiRequest, NextApiResponse } from "next"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
+import { prisma } from "@/lib/prisma";
+import { NextRequest, NextResponse } from "next/server";
 
-export default async function login(req: NextApiRequest, res: NextApiResponse) {
+export async function POST(request: NextRequest) {
     try {
-        const {email, password} = req.body
+        const body = await request.json()
+        const {email, password} = body
 
         const user = await prisma.users.findFirst({where: {email}});
         const match = user ? await bcrypt.compare(password, user.password) : false
         if (!user || !match) {
-            return res.status(404).json({
-                message: "User not found or password wrong"
-        })}
+            return NextResponse.json(
+                {message: "User didnt exist or password wrong"},
+                {status: 400}
+        )}
         const identity = {id: user.id, name: user.name, email: user.email, photo_profile: user.photo_profile}
         const token = jwt.sign(
             {id:user.id, name: user.name, email: user.email, photo_profile: user.photo_profile},
             process.env.SECRET_KEY as string, 
             {expiresIn: '2 days'})
-        res.status(200).json({
-            message: "Success",
-            token, identity
-        })
+        return NextResponse.json(
+            {message: "login successfull", token, identity},
+            {status: 200}
+        )
     } catch (error) {
         console.log(error)
     }
